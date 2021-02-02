@@ -1,0 +1,13 @@
+---
+- hosts: all
+  user: sidd
+  vars:
+          lover: nidhi
+  tasks:
+          - name: copy index.html file to server
+            template:
+                    src: index.jinja2
+                    dest: /home/sidd/index.html
+                    owner: sidd
+                    group: sidd
+                    mode: 0644

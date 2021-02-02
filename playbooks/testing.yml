@@ -1,0 +1,58 @@
+---
+- name: Let's do the work
+  hosts: all
+  user: sidd
+  become: yes
+  connection: ssh
+  vars:
+          sidd: httpd
+          menus:
+                  - name: Home
+                    link: /home
+                  - name: Products
+                    link: /products
+                  - name: About Us
+                    link: /about-us
+                  - name: Contact Us
+                    link: /contact-us
+  tasks:
+          - name: Install {{sidd}} pkg
+            yum:
+                    name: '{{sidd}}'
+                    state: present
+
+          - name: Create html directory
+            file:
+                    name: /var/www/html/
+                    state: directory
+
+          - name: start {{sidd}} service
+            service:
+                    name: '{{sidd}}'
+                    state: started
+
+          - name: copy index.html file to server
+            template:
+                    src: index.jinja2
+                    dest: /var/www/html/index.html
+                    owner: root
+                    group: root
+                    mode: 0644
+
+          - pause: seconds=60
+
+          - name: Remove the content
+            file:
+                    path: /var/www/html/
+                    state: absent
+
+          - name: Stop the {{sidd}} service
+            service:
+                    name: '{{sidd}}'
+                    state: stopped
+
+          - name: Uninstall the {{sidd}} service
+            yum:
+                    name: '{{sidd}}'
+                    state: absent
+

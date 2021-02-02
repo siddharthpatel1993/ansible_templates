@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jinja2 Template Demo</title>
+</head>
+<body>
+  <h1>Welcome to Linuxhint!</h1>
+  {% if ansible_distribution == "Amazon" %}
+  <p>You're running amazon linux</p>
+  {% elif ansible_distribution == "RedHat" %}
+  <p>You're running RedHAt linux</p>
+  {% else %}
+  <p>your operating system is not supported</p> 
+  {% endif %}
+  <nav>
+ <ul>
+  {% for menu in menus %}
+  <li><a href="{{ menu.link }}">{{ menu.name }}</a></li>
+  {% endfor %}
+  </ul>
+</nav>
+</body>
+</html>
