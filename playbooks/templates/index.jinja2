@@ -9,15 +9,17 @@
   <p>You're running amazon linux</p>
   {% elif ansible_distribution == "RedHat" %}
   <p>You're running RedHAt linux</p>
+  {% elif ansible_distribution == "Ubuntu" %}
+  <p>You're running Ubuntu linux</p>
   {% else %}
   <p>your operating system is not supported</p> 
   {% endif %}
-  <nav>
+<!--  <nav>
  <ul>
   {% for menu in menus %}
   <li><a href="{{ menu.link }}">{{ menu.name }}</a></li>
   {% endfor %}
   </ul>
-</nav>
+</nav> -->
 </body>
 </html>

@@ -16,22 +16,36 @@
                   - name: Contact Us
                     link: /contact-us
   tasks:
-          - name: Install {{sidd}} pkg
+          - name: Install {{sidd}} pkg for RedHat
             yum:
                     name: '{{sidd}}'
                     state: present
+            when: ansible_os_family == "RedHat"
 
-          - name: Create html directory
+          - name: Install apache pkg for debian
+            apt:
+                    name: apache2
+                    state: present
+            when: ansible_os_family == "Debian"
+
+          - name: Create html directory for both
             file:
                     name: /var/www/html/
                     state: directory
 
-          - name: start {{sidd}} service
+          - name: start {{sidd}} service for RedHat
             service:
                     name: '{{sidd}}'
                     state: started
+            when: ansible_os_family == "RedHat"
 
-          - name: copy index.html file to server
+          - name: start apache2 service for Debian
+            service:
+                    name: apache2
+                    state: started
+            when: ansible_os_family == "Debian" 
+
+          - name: copy index.html file to server for both
             template:
                     src: index.jinja2
                     dest: /var/www/html/index.html
@@ -41,18 +55,33 @@
 
           - pause: seconds=60
 
-          - name: Remove the content
+          - name: Remove the content for both
             file:
                     path: /var/www/html/
                     state: absent
 
-          - name: Stop the {{sidd}} service
+          - name: Stop the {{sidd}} service for RedHat
             service:
                     name: '{{sidd}}'
                     state: stopped
+            when: ansible_os_family == "RedHat"
 
-          - name: Uninstall the {{sidd}} service
+          - name: stop apache2 service for Debian
+            service:
+                    name: apache2
+                    state: stopped
+            when: ansible_os_family == "Debian"
+
+          - name: Uninstall the {{sidd}} service for Redhat
             yum:
                     name: '{{sidd}}'
                     state: absent
+            when: ansible_os_family == "RedHat"
+
+          - name: Remove apache pkg for Debian
+            apt:
+                    name: apache2
+                    state: absent
+            when: ansible_os_family == "Debian"
+
 
